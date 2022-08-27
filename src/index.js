@@ -9,6 +9,11 @@ import '../assets/css/style.css';
 // API_KEY for maps api
 let API_KEY = 'c354b8bdf0316e61199a54c4a37f9a7d';
 const searchBtn = document.querySelector('.search-btn');
+const cityName = document.getElementById('city-name');
+const weatherType = document.getElementById('weather-type');
+const temp = document.getElementById('temp');
+const minTemp = document.getElementById('min-temp');
+const maxTemp = document.getElementById('max-temp');
 
 /**
  * Retrieve weather data from openweathermap
@@ -20,37 +25,39 @@ const searchBtn = document.querySelector('.search-btn');
  */
 const getWeatherData = (city) => {
   const URL = 'https://api.openweathermap.org/data/2.5/weather';
-  const FULL_URL = `${URL}?q=${city}&appid=${API_KEY}&units=imperial`;
-  const fetchData = fetch(FULL_URL);
-  return fetchData.then((response) => {
-    return response.json();
-  });
+  const weatherUrl = `${URL}?q=${city}&appid=${API_KEY}&units=imperial`;
+  const weatherPromise = fetch(weatherUrl);
+  return weatherPromise
+    .then((res) => res.json())
+    .then((data) => showWeatherData(data))
+    .catch((err) => console.log(err.message));
 };
 
 /**
  * Retrieve city input and get the weather data
  * HINT: Use the promise returned from getWeatherData()
  */
-const cityName = document.getElementById('city-name');
-const weatherType = document.getElementById('weather-type');
-const showWeatherData = (weatherData) => {
-  console.log(weatherData);
-  const { weather } = weatherData;
-  const { description } = weather[0];
-  cityName.textContent = weatherData.name;
-  weatherType.textContent = description;
+
+const showWeatherData = ({ main, name, weather }) => {
   //CODE GOES HERE
+  const { description } = weather[0];
+  cityName.textContent = name;
+  weatherType.textContent = description;
+  temp.textContent = main.temp;
+  minTemp.textContent = main.temp_min;
+  maxTemp.textContent = main.temp_max;
 };
 
 searchBtn.addEventListener('click', () => {
   const city = document.getElementById('city-input').value;
-  console.log(city);
-  getWeatherData(city)
-    .then((res) => showWeatherData(res) || console.log(res))
-    .catch((err) => console.log(err.message));
+  getWeatherData(city);
   // CODE GOES HERE
 });
-/**
- * Show the weather data in HTML
- * HINT: make sure to console log the weatherData to see how the data looks like
- */
+
+String.prototype.reality = function () {
+  return typeof this;
+};
+
+const nickName = 'El3aw';
+
+console.log(nickName.reality());
